@@ -13,15 +13,18 @@ import argparse
 import json
 import sys
 import urllib.request
-from datetime import datetime, timezone, timedelta
+from datetime import date, datetime, time, timezone, timedelta
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SNAPSHOT = ROOT / "data" / "latest.json"
 FINANCE_SKILL = Path("/Users/zhangchao/.claude/skills/finance-all-in-one")
 BJT = timezone(timedelta(hours=8))
+NYT = ZoneInfo("America/New_York")
+US_REGULAR_CLOSE = time(16, 0)
 PERIODS = {
     "1d": 1,
     "5d": 5,
@@ -101,10 +104,27 @@ def calc_returns_newest_first(values: list[float], dates: list[datetime] | None 
     return returns
 
 
+def last_eligible_us_close_date(now: datetime | None = None) -> date:
+    """Return the latest US trading date whose regular session is allowed to be used.
+
+    This guard avoids ever mixing pre-market, regular-session intraday, after-hours,
+    or overnight prices into the static dashboard. The Nasdaq historical endpoint is
+    daily close data, but we still cap the requested/accepted date by NYSE clock.
+    """
+    ny_now = (now or datetime.now(timezone.utc)).astimezone(NYT)
+    eligible = ny_now.date()
+    if ny_now.time() < US_REGULAR_CLOSE:
+        eligible = eligible - timedelta(days=1)
+    while eligible.weekday() >= 5:
+        eligible = eligible - timedelta(days=1)
+    return eligible
+
+
 def fetch_nasdaq_etf_returns(ticker: str) -> dict[str, float]:
+    end_date = last_eligible_us_close_date()
     url = (
         f"https://api.nasdaq.com/api/quote/{ticker}/historical"
-        f"?assetclass=etf&fromdate={NASDAQ_FROM}&todate={datetime.now(BJT).strftime('%Y-%m-%d')}&limit=9999"
+        f"?assetclass=etf&fromdate={NASDAQ_FROM}&todate={end_date.isoformat()}&limit=9999"
     )
     request = urllib.request.Request(
         url,
@@ -123,8 +143,11 @@ def fetch_nasdaq_etf_returns(ticker: str) -> dict[str, float]:
     for row in rows:
         close = str(row.get("close", "")).replace("$", "").replace(",", "")
         try:
+            row_date = datetime.strptime(row["date"], "%m/%d/%Y").date()
+            if row_date > end_date:
+                continue
             closes.append(float(close))
-            dates.append(datetime.strptime(row["date"], "%m/%d/%Y").replace(tzinfo=BJT))
+            dates.append(datetime.combine(row_date, US_REGULAR_CLOSE, tzinfo=NYT))
         except (KeyError, TypeError, ValueError):
             continue
     return calc_returns_newest_first(closes, dates)
@@ -191,45 +214,12 @@ def try_update_us(snapshot: dict[str, Any]) -> None:
             theme["us"]["strength"] = score_from_returns(theme["us"]["returns"])
         snapshot["sourceNote"] = (
             "生产校验版：A股ETF代码、名称、成交额和涨跌幅来自东方财富公开行情；"
-            "美股主ETF涨跌幅来自Nasdaq历史行情。历史不足的标的仅展示可计算周期。"
+            "美股主ETF涨跌幅仅使用Nasdaq常规交易时段日线收盘价，不使用盘后、夜盘或实时价。"
+            "历史不足的标的仅展示可计算周期。"
         )
         return
 
-    try:
-        import yfinance as yf  # type: ignore
-    except Exception:
-        print("yfinance 不可用，跳过美股刷新。")
-        return
-
-    tickers = sorted({theme["us"]["primary"] for theme in snapshot["themes"]} | {"SPY"})
-    try:
-        data = yf.download(tickers, period="1y", auto_adjust=True, progress=False)
-    except Exception as exc:
-        print(f"美股刷新失败: {exc}")
-        return
-
-    close = data.get("Close")
-    if close is None or close.empty:
-        print("美股刷新返回空数据。")
-        return
-
-    spy = close["SPY"].dropna().tolist() if "SPY" in close else []
-    spy_returns = calc_returns([float(x) for x in spy]) if spy else {}
-
-    for theme in snapshot["themes"]:
-        ticker = theme["us"]["primary"]
-        if ticker not in close:
-            continue
-        prices = [float(x) for x in close[ticker].dropna().tolist()]
-        returns = calc_returns(prices)
-        if not returns:
-            continue
-        theme["us"]["returns"].update(returns)
-        theme["us"]["rel"] = {
-            key: round(returns.get(key, 0) - spy_returns.get(key, 0), 1)
-            for key in ("5d", "20d", "60d", "120d")
-        }
-        theme["us"]["strength"] = score_from_returns(theme["us"]["returns"])
+    print("Nasdaq常规收盘数据不可用，跳过美股刷新，避免使用盘后/夜盘/实时价降级源。")
 
 
 def try_update_cn(snapshot: dict[str, Any]) -> None:
