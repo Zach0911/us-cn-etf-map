@@ -95,7 +95,8 @@ def assert_ga_tracking_config() -> None:
     app_js = (ROOT / "src" / "app.js").read_text(encoding="utf-8")
 
     assert f"https://www.googletagmanager.com/gtag/js?id={GA_MEASUREMENT_ID}" in index_html
-    assert f'gtag("config", "{GA_MEASUREMENT_ID}")' in index_html
+    assert "function gtag(){dataLayer.push(arguments);}" in index_html
+    assert f"gtag('config', '{GA_MEASUREMENT_ID}')" in index_html
     assert "function trackEvent" in app_js
 
     for event_name in [

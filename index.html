@@ -8,14 +8,14 @@
       name="description"
       content="基于美股主题ETF强弱，映射A股场内ETF候选池的一页投资看板。"
     />
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-B4PWH30B3G"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      window.gtag = function () {
-        window.dataLayer.push(arguments);
-      };
-      gtag("js", new Date());
-      gtag("config", "G-B4PWH30B3G");
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-B4PWH30B3G');
     </script>
     <link rel="stylesheet" href="./src/styles.css?v=20260603m" />
   </head>
