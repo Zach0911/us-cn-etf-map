@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import urllib.request
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
@@ -28,6 +29,7 @@ PERIODS = {
     "60d": 60,
     "120d": 120,
 }
+NASDAQ_FROM = "2025-01-01"
 
 SYNONYMS = {
     "DRAM": ["存储", "芯片", "半导体"],
@@ -83,6 +85,51 @@ def score_from_returns(returns: dict[str, float]) -> dict[str, int]:
     return {"short": short, "mid": mid, "long": long, "all": all_score}
 
 
+def calc_returns_newest_first(values: list[float], dates: list[datetime] | None = None) -> dict[str, float]:
+    returns: dict[str, float] = {}
+    if len(values) < 2:
+        return returns
+    last = values[0]
+    for key, days in PERIODS.items():
+        if len(values) > days and values[days] > 0:
+            returns[key] = round((last / values[days] - 1) * 100, 1)
+    if dates:
+        year = dates[0].year
+        ytd_base = next((idx for idx in range(len(dates) - 1, -1, -1) if dates[idx].year == year), None)
+        if ytd_base and values[ytd_base] > 0:
+            returns["ytd"] = round((last / values[ytd_base] - 1) * 100, 1)
+    return returns
+
+
+def fetch_nasdaq_etf_returns(ticker: str) -> dict[str, float]:
+    url = (
+        f"https://api.nasdaq.com/api/quote/{ticker}/historical"
+        f"?assetclass=etf&fromdate={NASDAQ_FROM}&todate={datetime.now(BJT).strftime('%Y-%m-%d')}&limit=9999"
+    )
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0",
+            "Accept": "application/json",
+            "Origin": "https://www.nasdaq.com",
+            "Referer": "https://www.nasdaq.com/",
+        },
+    )
+    with urllib.request.urlopen(request, timeout=12) as response:
+        payload = json.loads(response.read().decode("utf-8"))
+    rows = payload.get("data", {}).get("tradesTable", {}).get("rows", [])
+    closes: list[float] = []
+    dates: list[datetime] = []
+    for row in rows:
+        close = str(row.get("close", "")).replace("$", "").replace(",", "")
+        try:
+            closes.append(float(close))
+            dates.append(datetime.strptime(row["date"], "%m/%d/%Y").replace(tzinfo=BJT))
+        except (KeyError, TypeError, ValueError):
+            continue
+    return calc_returns_newest_first(closes, dates)
+
+
 def expand_tags(tags: list[str]) -> set[str]:
     expanded = {tag.lower() for tag in tags}
     for tag in tags:
@@ -120,6 +167,34 @@ def refresh_mapping_scores(snapshot: dict[str, Any]) -> None:
 
 
 def try_update_us(snapshot: dict[str, Any]) -> None:
+    tickers = sorted({theme["us"]["primary"] for theme in snapshot["themes"]} | {"SPY"})
+    nasdaq_returns: dict[str, dict[str, float]] = {}
+    try:
+        for ticker in tickers:
+            nasdaq_returns[ticker] = fetch_nasdaq_etf_returns(ticker)
+    except Exception as exc:
+        print(f"Nasdaq美股刷新失败，尝试yfinance降级: {exc}")
+    else:
+        spy_returns = nasdaq_returns.get("SPY", {})
+        for theme in snapshot["themes"]:
+            ticker = theme["us"]["primary"]
+            returns = nasdaq_returns.get(ticker, {})
+            if not returns:
+                continue
+            # Replace instead of update so insufficient-history periods do not keep stale values.
+            theme["us"]["returns"] = returns
+            theme["us"]["rel"] = {
+                key: round(returns.get(key, 0) - spy_returns.get(key, 0), 1)
+                for key in ("5d", "20d", "60d", "120d")
+                if key in returns and key in spy_returns
+            }
+            theme["us"]["strength"] = score_from_returns(theme["us"]["returns"])
+        snapshot["sourceNote"] = (
+            "生产校验版：A股ETF代码、名称、成交额和涨跌幅来自东方财富公开行情；"
+            "美股主ETF涨跌幅来自Nasdaq历史行情。历史不足的标的仅展示可计算周期。"
+        )
+        return
+
     try:
         import yfinance as yf  # type: ignore
     except Exception:

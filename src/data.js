@@ -1,7 +1,7 @@
 export const marketData = {
-  "date": "2026-06-03",
-  "updatedAt": "2026-06-04T00:12:00.080+08:00",
-  "sourceNote": "生产校验版：A股ETF代码、名称、成交额和涨跌幅来自东方财富公开行情；美股主ETF涨跌幅来自Nasdaq历史行情。DRAM等历史不足的标的仅展示可计算周期，长周期不足则不填充。",
+  "date": "2026-06-04",
+  "updatedAt": "2026-06-04T08:32:30+08:00",
+  "sourceNote": "生产校验版：A股ETF代码、名称、成交额和涨跌幅来自东方财富公开行情；美股主ETF涨跌幅来自Nasdaq历史行情。历史不足的标的仅展示可计算周期。",
   "periods": [
     "1d",
     "5d",
@@ -76,8 +76,7 @@ export const marketData = {
           ],
           "matchedTags": [
             "半导体",
-            "存储",
-            "芯片"
+            "存储"
           ]
         },
         {
@@ -98,7 +97,7 @@ export const marketData = {
             "120d": 8.6
           },
           "amount": 17.5,
-          "mappingScore": 84,
+          "mappingScore": 88,
           "status": "共振",
           "reasons": [
             "A股暂无纯存储主题场内基金",
@@ -117,7 +116,7 @@ export const marketData = {
       "id": "semiconductor",
       "name": "半导体",
       "signal": "共振",
-      "confidence": 85,
+      "confidence": 95,
       "lead": "美股与A股同步走强",
       "tags": [
         "SOXX",
@@ -173,12 +172,17 @@ export const marketData = {
             "120d": 9.3
           },
           "amount": 20.8,
-          "mappingScore": 96,
+          "mappingScore": 99,
           "status": "共振",
           "reasons": [
             "ETF名称与半导体行业直接匹配",
             "A股半导体流动性代表品种",
             "适合作为SOXX/SMH的核心映射"
+          ],
+          "matchedTags": [
+            "smh",
+            "soxx",
+            "半导体"
           ]
         }
       ]
@@ -187,7 +191,7 @@ export const marketData = {
       "id": "ai_compute",
       "name": "AI算力",
       "signal": "共振",
-      "confidence": 95,
+      "confidence": 93,
       "lead": "算力链条中美同步活跃",
       "tags": [
         "AI",
@@ -221,7 +225,7 @@ export const marketData = {
           "short": 65,
           "mid": 99,
           "long": 99,
-          "all": 91
+          "all": 90
         }
       },
       "cn": [
@@ -243,7 +247,7 @@ export const marketData = {
             "120d": 13
           },
           "amount": 4,
-          "mappingScore": 97,
+          "mappingScore": 96,
           "status": "共振",
           "reasons": [
             "主题名称直接命中AI",
@@ -284,7 +288,7 @@ export const marketData = {
           "matchedTags": [
             "ai",
             "人工智能",
-            "服务器",
+            "算力",
             "计算机"
           ]
         }
@@ -294,7 +298,7 @@ export const marketData = {
       "id": "robotics",
       "name": "机器人",
       "signal": "共振",
-      "confidence": 74,
+      "confidence": 81,
       "lead": "美股机器人短期转强",
       "tags": [
         "BOTZ",
@@ -325,7 +329,7 @@ export const marketData = {
         },
         "strength": {
           "short": 49,
-          "mid": 78,
+          "mid": 77,
           "long": 81,
           "all": 72
         }
@@ -349,7 +353,7 @@ export const marketData = {
             "120d": 5.4
           },
           "amount": 2.8,
-          "mappingScore": 76,
+          "mappingScore": 90,
           "status": "传导",
           "reasons": [
             "名称和主题完全匹配",
@@ -399,7 +403,7 @@ export const marketData = {
           "short": 57,
           "mid": 99,
           "long": 99,
-          "all": 89
+          "all": 88
         }
       },
       "cn": [
@@ -453,7 +457,7 @@ export const marketData = {
             "120d": 2.9
           },
           "amount": 1.9,
-          "mappingScore": 86,
+          "mappingScore": 85,
           "status": "背离",
           "reasons": [
             "覆盖锂电与新能源产业链",
@@ -470,7 +474,7 @@ export const marketData = {
       "id": "solar_clean",
       "name": "光伏/清洁能源",
       "signal": "传导",
-      "confidence": 88,
+      "confidence": 89,
       "lead": "海外清洁能源回暖，A股趋势仍弱",
       "tags": [
         "TAN",
@@ -524,7 +528,7 @@ export const marketData = {
             "120d": -7.6
           },
           "amount": 4.9,
-          "mappingScore": 86,
+          "mappingScore": 88,
           "status": "背离",
           "reasons": [
             "TAN与光伏主题高度匹配",
@@ -542,7 +546,7 @@ export const marketData = {
       "id": "cyber_security",
       "name": "网络安全",
       "signal": "传导",
-      "confidence": 89,
+      "confidence": 80,
       "lead": "美股网络安全中期走强",
       "tags": [
         "CIBR",
@@ -596,7 +600,7 @@ export const marketData = {
             "120d": 8.8
           },
           "amount": 0.6,
-          "mappingScore": 62,
+          "mappingScore": 68,
           "status": "传导",
           "reasons": [
             "A股暂无高流动性纯网络安全ETF",
@@ -613,8 +617,8 @@ export const marketData = {
     {
       "id": "aerospace_defense",
       "name": "航天军工",
-      "signal": "共振",
-      "confidence": 76,
+      "signal": "背离",
+      "confidence": 74,
       "lead": "国防航天主题同步强",
       "tags": [
         "ITA",
@@ -646,9 +650,9 @@ export const marketData = {
         },
         "strength": {
           "short": 48,
-          "mid": 51,
-          "long": 72,
-          "all": 59
+          "mid": 53,
+          "long": 74,
+          "all": 60
         }
       },
       "cn": [
@@ -670,7 +674,7 @@ export const marketData = {
             "120d": 7.7
           },
           "amount": 6.1,
-          "mappingScore": 87,
+          "mappingScore": 89,
           "status": "共振",
           "reasons": [
             "ITA与军工主题高度接近",
@@ -686,8 +690,8 @@ export const marketData = {
     {
       "id": "biotech",
       "name": "生物科技/创新药",
-      "signal": "传导",
-      "confidence": 73,
+      "signal": "背离",
+      "confidence": 74,
       "lead": "美股创新药改善，A股低位修复",
       "tags": [
         "IBB",
@@ -717,9 +721,9 @@ export const marketData = {
         },
         "strength": {
           "short": 37,
-          "mid": 48,
-          "long": 63,
-          "all": 51
+          "mid": 47,
+          "long": 62,
+          "all": 50
         }
       },
       "cn": [
@@ -741,7 +745,7 @@ export const marketData = {
             "120d": 2.8
           },
           "amount": 5.6,
-          "mappingScore": 95,
+          "mappingScore": 98,
           "status": "传导",
           "reasons": [
             "XBI/IBB与创新药风险偏好相关",
@@ -771,7 +775,7 @@ export const marketData = {
             "120d": 1.9
           },
           "amount": 6.7,
-          "mappingScore": 50,
+          "mappingScore": 51,
           "status": "传导",
           "reasons": [
             "医药宽基可作为低弹性替代",
@@ -786,8 +790,8 @@ export const marketData = {
     {
       "id": "gold_metals",
       "name": "黄金/有色",
-      "signal": "共振",
-      "confidence": 72,
+      "signal": "背离",
+      "confidence": 74,
       "lead": "避险与资源品共振",
       "tags": [
         "GLD",
@@ -818,9 +822,9 @@ export const marketData = {
         },
         "strength": {
           "short": 49,
-          "mid": 29,
-          "long": 65,
-          "all": 48
+          "mid": 31,
+          "long": 66,
+          "all": 50
         }
       },
       "cn": [
@@ -872,7 +876,7 @@ export const marketData = {
             "120d": 11
           },
           "amount": 12.7,
-          "mappingScore": 96,
+          "mappingScore": 99,
           "status": "共振",
           "reasons": [
             "SLV/PICK可映射有色资源",
@@ -890,7 +894,7 @@ export const marketData = {
       "id": "oil_energy",
       "name": "原油/能源",
       "signal": "共振",
-      "confidence": 79,
+      "confidence": 77,
       "lead": "能源价格短期上行",
       "tags": [
         "XLE",
@@ -920,7 +924,7 @@ export const marketData = {
         },
         "strength": {
           "short": 52,
-          "mid": 50,
+          "mid": 49,
           "long": 99,
           "all": 70
         }
@@ -929,7 +933,7 @@ export const marketData = {
         {
           "code": "159930",
           "index": "中证能源指数",
-          "mappingScore": 88,
+          "mappingScore": 84,
           "status": "共振",
           "reasons": [
             "A股能源主题ETF",
@@ -944,7 +948,11 @@ export const marketData = {
             "20d": -1.4,
             "60d": -3,
             "120d": 21.9
-          }
+          },
+          "matchedTags": [
+            "xle",
+            "能源"
+          ]
         },
         {
           "code": "159981",
@@ -964,12 +972,15 @@ export const marketData = {
             "20d": -5.3,
             "60d": 16.7,
             "120d": 32.8
-          }
+          },
+          "matchedTags": [
+            "能源"
+          ]
         },
         {
           "code": "515220",
           "index": "中证煤炭指数",
-          "mappingScore": 72,
+          "mappingScore": 54,
           "status": "传导",
           "reasons": [
             "煤炭属于传统能源分支",
@@ -984,7 +995,10 @@ export const marketData = {
             "20d": 5.9,
             "60d": 11.8,
             "120d": 27.4
-          }
+          },
+          "matchedTags": [
+            "能源"
+          ]
         }
       ]
     },
@@ -992,7 +1006,7 @@ export const marketData = {
       "id": "china_internet",
       "name": "中概互联网/港股科技",
       "signal": "共振",
-      "confidence": 65,
+      "confidence": 64,
       "lead": "同一资产跨市场定价",
       "tags": [
         "KWEB",
@@ -1094,7 +1108,7 @@ export const marketData = {
       "id": "financials",
       "name": "金融/券商银行",
       "signal": "背离",
-      "confidence": 72,
+      "confidence": 70,
       "lead": "美股金融强，A股金融分化",
       "tags": [
         "XLF",
@@ -1126,8 +1140,8 @@ export const marketData = {
         "strength": {
           "short": 49,
           "mid": 52,
-          "long": 35,
-          "all": 44
+          "long": 36,
+          "all": 45
         }
       },
       "cn": [
@@ -1149,7 +1163,7 @@ export const marketData = {
             "120d": 8.9
           },
           "amount": 6.7,
-          "mappingScore": 89,
+          "mappingScore": 90,
           "status": "背离",
           "reasons": [
             "与KBE/KRE银行链条相关",
@@ -1178,7 +1192,7 @@ export const marketData = {
             "120d": 3
           },
           "amount": 3.4,
-          "mappingScore": 99,
+          "mappingScore": 95,
           "status": "背离",
           "reasons": [
             "券商保险可映射XLF部分敞口",
