@@ -54,7 +54,7 @@ python3 scripts/generate_people_snapshot.py
 
 脚本会尽量使用免费数据：
 
-- 美股 ETF：优先 `yfinance`。
+- 美股 ETF：使用 Nasdaq 历史日线收盘价，强弱分数使用最新收盘价相对 EMA 的偏离计算；历史不足的标的使用可得日线初始化 EMA。
 - A 股 ETF：优先本地 `/Users/zhangchao/.claude/skills/finance-all-in-one` 的 `get_etf_kline`。
 - 人物雷达：事件事实来自人工核验的公开来源；涨跌幅优先通过 `finance-all-in-one` 获取美股日线，失败时降级到 Nasdaq 历史日线收盘价，并把实际行情源写入 `priceBasis.source`。
 - 人物照片：页面优先加载 `assets/people/*.webp` 本地静态图，外部真实照片链接只作为失败兜底，避免首屏受外链延时影响。
@@ -87,6 +87,7 @@ python3 scripts/generate_people_snapshot.py
     "primary": "DRAM",
     "etfs": ["DRAM", "SOXX", "SMH"],
     "returns": { "1d": 2.8, "5d": 7.6, "20d": 13.4, "60d": 24.8, "120d": 31.5, "ytd": 34.2 },
+    "ema": { "ema5": 1.8, "ema20": 4.2, "ema60": 8.1, "ema120": 11.6, "emaYtd": 10.4 },
     "rel": { "5d": 4.1, "20d": 7.8, "60d": 12.4, "120d": 15.1 },
     "strength": { "short": 94, "mid": 91, "long": 88, "all": 92 }
   },
@@ -100,6 +101,18 @@ python3 scripts/generate_people_snapshot.py
     }
   ]
 }
+```
+
+美股主题强弱分数口径：
+
+```text
+EMA信号N = (最新收盘价 / EMA_N - 1) * 100
+score(x) = clamp(round(50 + x * 3), 0, 99)
+
+短期 = score(EMA5信号 * 0.4 + EMA20信号 * 0.6)
+中期 = score(EMA20信号 * 0.55 + EMA60信号 * 0.45)
+长期 = score(EMA120信号 * 0.6 + EMA年内信号 * 0.4)
+综合 = round(短期 * 0.25 + 中期 * 0.35 + 长期 * 0.4)
 ```
 
 ## 下一步增强

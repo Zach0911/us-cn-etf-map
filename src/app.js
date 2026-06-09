@@ -40,7 +40,7 @@ const signalDescriptions = {
 };
 
 const strengthDescription =
-  "强度是当前美股主题ETF在所选周期内的0-100分。计算时会参考主ETF涨跌幅、趋势延续、主题内ETF共振情况和相对排名，分数越高代表该主题越强。";
+  "强度是当前美股主题ETF在所选周期内的0-100分。分数使用最新收盘价相对EMA的偏离计算：短期参考EMA5/EMA20，中期参考EMA20/EMA60，长期参考EMA120/年内EMA，综合为三类分数加权。";
 
 const selectedStrengthDescription =
   "这里展示的是当前选中美股主题的强度，不是A股ETF强度。它会随短期、中期、长期、综合周期切换而变化，用来判断美股主题本身的强弱。";

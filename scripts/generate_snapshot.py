@@ -21,6 +21,7 @@ from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 SNAPSHOT = ROOT / "data" / "latest.json"
+FALLBACK_DATA = ROOT / "src" / "data.js"
 FINANCE_SKILL = Path("/Users/zhangchao/.claude/skills/finance-all-in-one")
 BJT = timezone(timedelta(hours=8))
 NYT = ZoneInfo("America/New_York")
@@ -31,6 +32,12 @@ PERIODS = {
     "20d": 20,
     "60d": 60,
     "120d": 120,
+}
+EMA_PERIODS = {
+    "ema5": 5,
+    "ema20": 20,
+    "ema60": 60,
+    "ema120": 120,
 }
 NASDAQ_FROM = "2025-01-01"
 
@@ -64,6 +71,12 @@ def load_snapshot() -> dict[str, Any]:
     return json.loads(SNAPSHOT.read_text(encoding="utf-8"))
 
 
+def write_snapshot(snapshot: dict[str, Any]) -> None:
+    payload = json.dumps(snapshot, ensure_ascii=False, indent=2)
+    SNAPSHOT.write_text(payload, encoding="utf-8")
+    FALLBACK_DATA.write_text(f"export const marketData = {payload};\n", encoding="utf-8")
+
+
 def calc_returns(values: list[float]) -> dict[str, float]:
     returns: dict[str, float] = {}
     if len(values) < 2:
@@ -77,15 +90,30 @@ def calc_returns(values: list[float]) -> dict[str, float]:
     return returns
 
 
-def score_from_returns(returns: dict[str, float]) -> dict[str, int]:
+def score_from_ema(ema: dict[str, float]) -> dict[str, int]:
     def clamp(value: float) -> int:
         return max(0, min(99, round(50 + value * 3)))
 
-    short = clamp(returns.get("1d", 0) * 0.4 + returns.get("5d", 0) * 0.6)
-    mid = clamp(returns.get("20d", 0) * 0.55 + returns.get("60d", 0) * 0.45)
-    long = clamp(returns.get("120d", 0) * 0.6 + returns.get("ytd", returns.get("120d", 0)) * 0.4)
+    ema120 = ema.get("ema120", ema.get("emaYtd", 0))
+    ema_ytd = ema.get("emaYtd", ema120)
+    short = clamp(ema.get("ema5", 0) * 0.4 + ema.get("ema20", 0) * 0.6)
+    mid = clamp(ema.get("ema20", 0) * 0.55 + ema.get("ema60", 0) * 0.45)
+    long = clamp(ema120 * 0.6 + ema_ytd * 0.4)
     all_score = round(short * 0.25 + mid * 0.35 + long * 0.4)
     return {"short": short, "mid": mid, "long": long, "all": all_score}
+
+
+def latest_ema_percent(values_chronological: list[float], span: int) -> float | None:
+    if len(values_chronological) < 2:
+        return None
+    alpha = 2 / (span + 1)
+    ema = values_chronological[0]
+    for value in values_chronological[1:]:
+        ema = value * alpha + ema * (1 - alpha)
+    latest = values_chronological[-1]
+    if ema <= 0:
+        return None
+    return round((latest / ema - 1) * 100, 1)
 
 
 def calc_returns_newest_first(values: list[float], dates: list[datetime] | None = None) -> dict[str, float]:
@@ -104,6 +132,28 @@ def calc_returns_newest_first(values: list[float], dates: list[datetime] | None 
     return returns
 
 
+def calc_ema_newest_first(values: list[float], dates: list[datetime] | None = None) -> dict[str, float]:
+    ema: dict[str, float] = {}
+    if len(values) < 2:
+        return ema
+    values_chronological = list(reversed(values))
+    for key, span in EMA_PERIODS.items():
+        signal = latest_ema_percent(values_chronological, span)
+        if signal is not None:
+            ema[key] = signal
+    if dates:
+        year = dates[0].year
+        ytd_values = [value for value, item_date in zip(values, dates) if item_date.year == year]
+        signal = latest_ema_percent(list(reversed(ytd_values)), max(2, len(ytd_values)))
+        if signal is not None:
+            ema["emaYtd"] = signal
+    else:
+        signal = latest_ema_percent(values_chronological, max(2, len(values_chronological)))
+        if signal is not None:
+            ema["emaYtd"] = signal
+    return ema
+
+
 def last_eligible_us_close_date(now: datetime | None = None) -> date:
     """Return the latest US trading date whose regular session is allowed to be used.
 
@@ -120,7 +170,7 @@ def last_eligible_us_close_date(now: datetime | None = None) -> date:
     return eligible
 
 
-def fetch_nasdaq_etf_returns(ticker: str) -> dict[str, float]:
+def fetch_nasdaq_etf_metrics(ticker: str) -> dict[str, dict[str, float]]:
     end_date = last_eligible_us_close_date()
     url = (
         f"https://api.nasdaq.com/api/quote/{ticker}/historical"
@@ -150,7 +200,10 @@ def fetch_nasdaq_etf_returns(ticker: str) -> dict[str, float]:
             dates.append(datetime.combine(row_date, US_REGULAR_CLOSE, tzinfo=NYT))
         except (KeyError, TypeError, ValueError):
             continue
-    return calc_returns_newest_first(closes, dates)
+    return {
+        "returns": calc_returns_newest_first(closes, dates),
+        "ema": calc_ema_newest_first(closes, dates),
+    }
 
 
 def expand_tags(tags: list[str]) -> set[str]:
@@ -191,31 +244,35 @@ def refresh_mapping_scores(snapshot: dict[str, Any]) -> None:
 
 def try_update_us(snapshot: dict[str, Any]) -> None:
     tickers = sorted({theme["us"]["primary"] for theme in snapshot["themes"]} | {"SPY"})
-    nasdaq_returns: dict[str, dict[str, float]] = {}
+    nasdaq_metrics: dict[str, dict[str, dict[str, float]]] = {}
     try:
         for ticker in tickers:
-            nasdaq_returns[ticker] = fetch_nasdaq_etf_returns(ticker)
+            nasdaq_metrics[ticker] = fetch_nasdaq_etf_metrics(ticker)
     except Exception as exc:
         print(f"Nasdaq美股刷新失败，尝试yfinance降级: {exc}")
     else:
-        spy_returns = nasdaq_returns.get("SPY", {})
+        spy_returns = nasdaq_metrics.get("SPY", {}).get("returns", {})
         for theme in snapshot["themes"]:
             ticker = theme["us"]["primary"]
-            returns = nasdaq_returns.get(ticker, {})
+            metrics = nasdaq_metrics.get(ticker, {})
+            returns = metrics.get("returns", {})
+            ema = metrics.get("ema", {})
             if not returns:
                 continue
             # Replace instead of update so insufficient-history periods do not keep stale values.
             theme["us"]["returns"] = returns
+            theme["us"]["ema"] = ema
             theme["us"]["rel"] = {
                 key: round(returns.get(key, 0) - spy_returns.get(key, 0), 1)
                 for key in ("5d", "20d", "60d", "120d")
                 if key in returns and key in spy_returns
             }
-            theme["us"]["strength"] = score_from_returns(theme["us"]["returns"])
+            theme["us"]["strength"] = score_from_ema(theme["us"]["ema"])
         snapshot["sourceNote"] = (
             "生产校验版：A股ETF代码、名称、成交额和涨跌幅来自东方财富公开行情；"
             "美股主ETF涨跌幅仅使用Nasdaq常规交易时段日线收盘价，不使用盘后、夜盘或实时价。"
-            "历史不足的标的仅展示可计算周期。"
+            "美股主题强弱分数使用最新收盘价相对EMA5/EMA20/EMA60/EMA120/年内EMA的偏离计算。"
+            "历史不足的标的使用可得日线初始化EMA，并仅展示可计算涨跌幅周期。"
         )
         return
 
@@ -281,7 +338,7 @@ def main() -> None:
         infer_signals(snapshot)
     snapshot["updatedAt"] = datetime.now(BJT).strftime("%Y-%m-%dT%H:%M:%S+08:00")
     snapshot["date"] = datetime.now(BJT).strftime("%Y-%m-%d")
-    SNAPSHOT.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2), encoding="utf-8")
+    write_snapshot(snapshot)
     print(f"OK: {SNAPSHOT}")
 
 

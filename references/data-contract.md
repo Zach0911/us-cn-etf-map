@@ -28,8 +28,23 @@ US object fields:
 - `primary`: primary US ETF ticker used for ranking and refresh.
 - `etfs`: related US ETF tickers shown in the UI.
 - `returns`: percentage returns keyed by `1d`, `5d`, `20d`, `60d`, `120d`, `ytd`.
+- `ema`: latest-close distance from EMA, in percentage points, keyed by `ema5`, `ema20`, `ema60`, `ema120`, `emaYtd`.
 - `rel`: relative returns versus broad US benchmark, keyed by `5d`, `20d`, `60d`, `120d`.
 - `strength`: integer scores keyed by `short`, `mid`, `long`, `all`.
+
+US strength scoring:
+
+```text
+EMA signal N = (latest close / EMA_N - 1) * 100
+score(x) = clamp(round(50 + x * 3), 0, 99)
+
+short = score(ema5 * 0.4 + ema20 * 0.6)
+mid = score(ema20 * 0.55 + ema60 * 0.45)
+long = score(ema120 * 0.6 + emaYtd * 0.4)
+all = round(short * 0.25 + mid * 0.35 + long * 0.4)
+```
+
+If a US ETF has fewer trading days than a long EMA span, the generator initializes that EMA from the available daily close history instead of omitting the input.
 
 A-share ETF candidate fields:
 

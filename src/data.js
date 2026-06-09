@@ -1,7 +1,7 @@
 export const marketData = {
-  "date": "2026-06-04",
-  "updatedAt": "2026-06-04T08:48:23+08:00",
-  "sourceNote": "生产校验版：A股ETF代码、名称、成交额和涨跌幅来自东方财富公开行情；美股主ETF涨跌幅仅使用Nasdaq常规交易时段日线收盘价，不使用盘后、夜盘或实时价。历史不足的标的仅展示可计算周期。",
+  "date": "2026-06-09",
+  "updatedAt": "2026-06-09T11:14:32+08:00",
+  "sourceNote": "生产校验版：A股ETF代码、名称、成交额和涨跌幅来自东方财富公开行情；美股主ETF涨跌幅仅使用Nasdaq常规交易时段日线收盘价，不使用盘后、夜盘或实时价。美股主题强弱分数使用最新收盘价相对EMA5/EMA20/EMA60/EMA120/年内EMA的偏离计算。历史不足的标的使用可得日线初始化EMA，并仅展示可计算涨跌幅周期。",
   "periods": [
     "1d",
     "5d",
@@ -15,7 +15,7 @@ export const marketData = {
       "id": "memory_chips",
       "name": "存储芯片",
       "signal": "共振",
-      "confidence": 91,
+      "confidence": 88,
       "lead": "美股领先，A股尚未完全跟随",
       "tags": [
         "DRAM",
@@ -32,20 +32,27 @@ export const marketData = {
           "SMH"
         ],
         "returns": {
-          "1d": 2.3,
-          "5d": 15,
-          "20d": 63.8,
-          "ytd": 150.6
+          "1d": 8.5,
+          "5d": -11.0,
+          "20d": 14.6,
+          "ytd": 118.0
         },
         "rel": {
-          "5d": 13.8,
-          "20d": 58
+          "5d": -8.5,
+          "20d": 14.4
         },
         "strength": {
-          "short": 80,
+          "short": 56,
           "mid": 99,
           "long": 99,
-          "all": 94
+          "all": 88
+        },
+        "ema": {
+          "ema5": -2.5,
+          "ema20": 4.8,
+          "ema60": 31.1,
+          "ema120": 55.0,
+          "emaYtd": 22.9
         }
       },
       "cn": [
@@ -116,7 +123,7 @@ export const marketData = {
       "id": "semiconductor",
       "name": "半导体",
       "signal": "共振",
-      "confidence": 95,
+      "confidence": 92,
       "lead": "美股与A股同步走强",
       "tags": [
         "SOXX",
@@ -133,24 +140,31 @@ export const marketData = {
           "XSD"
         ],
         "returns": {
-          "1d": 5.8,
-          "5d": 6.1,
-          "20d": 30.9,
-          "60d": 87,
-          "120d": 93.4,
-          "ytd": 92.9
+          "1d": 5.9,
+          "5d": -0.1,
+          "20d": 9.8,
+          "60d": 73.1,
+          "120d": 90.8,
+          "ytd": 82.2
         },
         "rel": {
-          "5d": 4.9,
-          "20d": 25.1,
-          "60d": 74,
-          "120d": 82.3
+          "5d": 2.4,
+          "20d": 9.6,
+          "60d": 62.1,
+          "120d": 82.4
         },
         "strength": {
-          "short": 68,
-          "mid": 99,
+          "short": 57,
+          "mid": 86,
           "long": 99,
-          "all": 91
+          "all": 84
+        },
+        "ema": {
+          "ema5": -0.5,
+          "ema20": 4.4,
+          "ema60": 21.1,
+          "ema120": 38.4,
+          "emaYtd": 33.9
         }
       },
       "cn": [
@@ -191,7 +205,7 @@ export const marketData = {
       "id": "ai_compute",
       "name": "AI算力",
       "signal": "共振",
-      "confidence": 93,
+      "confidence": 86,
       "lead": "算力链条中美同步活跃",
       "tags": [
         "AI",
@@ -208,24 +222,31 @@ export const marketData = {
           "QQQ"
         ],
         "returns": {
-          "1d": 0.9,
-          "5d": 7.8,
-          "20d": 25.7,
-          "60d": 55.2,
-          "120d": 41.8,
-          "ytd": 45.2
+          "1d": 2.1,
+          "5d": -7.2,
+          "20d": 8.8,
+          "60d": 42.9,
+          "120d": 33.5,
+          "ytd": 33.6
         },
         "rel": {
-          "5d": 6.6,
-          "20d": 19.9,
-          "60d": 42.2,
-          "120d": 30.7
+          "5d": -4.7,
+          "20d": 8.6,
+          "60d": 31.9,
+          "120d": 25.1
         },
         "strength": {
-          "short": 65,
-          "mid": 99,
+          "short": 51,
+          "mid": 71,
           "long": 99,
-          "all": 90
+          "all": 77
+        },
+        "ema": {
+          "ema5": -1.9,
+          "ema20": 1.7,
+          "ema60": 13.5,
+          "ema120": 22.0,
+          "emaYtd": 20.3
         }
       },
       "cn": [
@@ -298,7 +319,7 @@ export const marketData = {
       "id": "robotics",
       "name": "机器人",
       "signal": "共振",
-      "confidence": 81,
+      "confidence": 69,
       "lead": "美股机器人短期转强",
       "tags": [
         "BOTZ",
@@ -314,24 +335,31 @@ export const marketData = {
           "ARKQ"
         ],
         "returns": {
-          "1d": 0.1,
-          "5d": -0.6,
-          "20d": 5.9,
-          "60d": 12.6,
-          "120d": 10.2,
-          "ytd": 10.7
+          "1d": 0.9,
+          "5d": -5.6,
+          "20d": -7.6,
+          "60d": 7.7,
+          "120d": 5.3,
+          "ytd": 4.4
         },
         "rel": {
-          "5d": -1.8,
-          "20d": 0.1,
-          "60d": -0.4,
-          "120d": -0.9
+          "5d": -3.1,
+          "20d": -7.8,
+          "60d": -3.3,
+          "120d": -3.1
         },
         "strength": {
-          "short": 49,
-          "mid": 77,
-          "long": 81,
-          "all": 72
+          "short": 42,
+          "mid": 44,
+          "long": 56,
+          "all": 48
+        },
+        "ema": {
+          "ema5": -2.0,
+          "ema20": -3.2,
+          "ema60": -0.2,
+          "ema120": 2.3,
+          "emaYtd": 1.3
         }
       },
       "cn": [
@@ -369,8 +397,8 @@ export const marketData = {
     {
       "id": "ev_battery",
       "name": "新能源车/锂电",
-      "signal": "传导",
-      "confidence": 94,
+      "signal": "背离",
+      "confidence": 82,
       "lead": "美股反弹，A股仍偏弱",
       "tags": [
         "DRIV",
@@ -386,24 +414,31 @@ export const marketData = {
           "HAIL"
         ],
         "returns": {
-          "1d": 2.3,
-          "5d": 2.1,
-          "20d": 13.5,
-          "60d": 41,
-          "120d": 40.7,
-          "ytd": 39.6
+          "1d": 1.3,
+          "5d": -5.9,
+          "20d": -1.7,
+          "60d": 28.7,
+          "120d": 30.3,
+          "ytd": 28.5
         },
         "rel": {
-          "5d": 0.9,
-          "20d": 7.7,
-          "60d": 28,
-          "120d": 29.6
+          "5d": -3.4,
+          "20d": -1.9,
+          "60d": 17.7,
+          "120d": 21.9
         },
         "strength": {
-          "short": 57,
-          "mid": 99,
-          "long": 99,
-          "all": 88
+          "short": 42,
+          "mid": 53,
+          "long": 87,
+          "all": 64
+        },
+        "ema": {
+          "ema5": -2.8,
+          "ema20": -2.4,
+          "ema60": 5.4,
+          "ema120": 13.4,
+          "emaYtd": 11.0
         }
       },
       "cn": [
@@ -473,8 +508,8 @@ export const marketData = {
     {
       "id": "solar_clean",
       "name": "光伏/清洁能源",
-      "signal": "传导",
-      "confidence": 89,
+      "signal": "背离",
+      "confidence": 73,
       "lead": "海外清洁能源回暖，A股趋势仍弱",
       "tags": [
         "TAN",
@@ -489,24 +524,31 @@ export const marketData = {
           "ICLN"
         ],
         "returns": {
-          "1d": 1.6,
-          "5d": 4.8,
-          "20d": 23.8,
-          "60d": 35.6,
-          "120d": 51.9,
-          "ytd": 40.1
+          "1d": -0.7,
+          "5d": -10.6,
+          "20d": 2.6,
+          "60d": 16.1,
+          "120d": 32.9,
+          "ytd": 23.2
         },
         "rel": {
-          "5d": 3.6,
-          "20d": 18,
-          "60d": 22.6,
-          "120d": 40.8
+          "5d": -8.1,
+          "20d": 2.4,
+          "60d": 5.1,
+          "120d": 24.5
         },
         "strength": {
-          "short": 61,
-          "mid": 99,
-          "long": 99,
-          "all": 90
+          "short": 37,
+          "mid": 48,
+          "long": 79,
+          "all": 58
+        },
+        "ema": {
+          "ema5": -4.9,
+          "ema20": -4.2,
+          "ema60": 3.3,
+          "ema120": 10.8,
+          "emaYtd": 7.8
         }
       },
       "cn": [
@@ -546,7 +588,7 @@ export const marketData = {
       "id": "cyber_security",
       "name": "网络安全",
       "signal": "传导",
-      "confidence": 80,
+      "confidence": 73,
       "lead": "美股网络安全中期走强",
       "tags": [
         "CIBR",
@@ -561,24 +603,31 @@ export const marketData = {
           "BUG"
         ],
         "returns": {
-          "1d": 0.2,
-          "5d": 11.6,
-          "20d": 35.2,
-          "60d": 42.9,
-          "120d": 25.4,
-          "ytd": 33.4
+          "1d": -0.7,
+          "5d": -8.5,
+          "20d": 14.4,
+          "60d": 31.9,
+          "120d": 16.6,
+          "ytd": 21.9
         },
         "rel": {
-          "5d": 10.4,
-          "20d": 29.4,
-          "60d": 29.9,
-          "120d": 14.3
+          "5d": -6.0,
+          "20d": 14.2,
+          "60d": 20.9,
+          "120d": 8.2
         },
         "strength": {
-          "short": 71,
-          "mid": 99,
+          "short": 52,
+          "mid": 73,
           "long": 99,
-          "all": 92
+          "all": 78
+        },
+        "ema": {
+          "ema5": -2.4,
+          "ema20": 2.6,
+          "ema60": 13.8,
+          "ema120": 18.3,
+          "emaYtd": 18.5
         }
       },
       "cn": [
@@ -618,7 +667,7 @@ export const marketData = {
       "id": "aerospace_defense",
       "name": "航天军工",
       "signal": "背离",
-      "confidence": 74,
+      "confidence": 70,
       "lead": "国防航天主题同步强",
       "tags": [
         "ITA",
@@ -635,24 +684,31 @@ export const marketData = {
           "ARKX"
         ],
         "returns": {
-          "1d": -0.7,
-          "5d": -0.5,
-          "20d": 6.5,
-          "60d": -5.7,
-          "120d": 11.7,
-          "ytd": 2.8
+          "1d": -1.0,
+          "5d": -1.2,
+          "20d": 1.7,
+          "60d": -1.8,
+          "120d": 8.5,
+          "ytd": 2.4
         },
         "rel": {
-          "5d": -1.7,
-          "20d": 0.7,
-          "60d": -18.7,
-          "120d": 0.6
+          "5d": 1.3,
+          "20d": 1.5,
+          "60d": -12.8,
+          "120d": 0.1
         },
         "strength": {
-          "short": 48,
-          "mid": 53,
-          "long": 74,
-          "all": 60
+          "short": 49,
+          "mid": 51,
+          "long": 53,
+          "all": 51
+        },
+        "ema": {
+          "ema5": -0.6,
+          "ema20": 0.1,
+          "ema60": 0.5,
+          "ema120": 1.7,
+          "emaYtd": 0.1
         }
       },
       "cn": [
@@ -691,7 +747,7 @@ export const marketData = {
       "id": "biotech",
       "name": "生物科技/创新药",
       "signal": "背离",
-      "confidence": 74,
+      "confidence": 73,
       "lead": "美股创新药改善，A股低位修复",
       "tags": [
         "IBB",
@@ -706,24 +762,31 @@ export const marketData = {
           "XBI"
         ],
         "returns": {
-          "1d": -4.4,
-          "5d": -4.2,
-          "20d": -4.3,
-          "60d": 3,
-          "120d": 3.3,
-          "ytd": 5.1
+          "1d": -0.2,
+          "5d": -3.9,
+          "20d": -4.7,
+          "60d": 4.7,
+          "120d": 4.3,
+          "ytd": 5.7
         },
         "rel": {
-          "5d": -5.4,
-          "20d": -10.1,
-          "60d": -10,
-          "120d": -7.8
+          "5d": -1.4,
+          "20d": -4.9,
+          "60d": -6.3,
+          "120d": -4.1
         },
         "strength": {
-          "short": 37,
-          "mid": 47,
-          "long": 62,
-          "all": 50
+          "short": 44,
+          "mid": 44,
+          "long": 53,
+          "all": 48
+        },
+        "ema": {
+          "ema5": -1.3,
+          "ema20": -2.6,
+          "ema60": -1.6,
+          "ema120": 1.9,
+          "emaYtd": -0.3
         }
       },
       "cn": [
@@ -791,7 +854,7 @@ export const marketData = {
       "id": "gold_metals",
       "name": "黄金/有色",
       "signal": "背离",
-      "confidence": 74,
+      "confidence": 67,
       "lead": "避险与资源品共振",
       "tags": [
         "GLD",
@@ -807,24 +870,31 @@ export const marketData = {
           "PICK"
         ],
         "returns": {
-          "1d": 0.2,
-          "5d": -0.5,
-          "20d": -0.7,
-          "60d": -13,
-          "120d": 6.9,
-          "ytd": 3.4
+          "1d": 0.3,
+          "5d": -3.4,
+          "20d": -8.4,
+          "60d": -14.9,
+          "120d": 0.5,
+          "ytd": -0.3
         },
         "rel": {
-          "5d": -1.7,
-          "20d": -6.5,
-          "60d": -26,
-          "120d": -4.2
+          "5d": -0.9,
+          "20d": -8.6,
+          "60d": -25.9,
+          "120d": -7.9
         },
         "strength": {
-          "short": 49,
-          "mid": 31,
-          "long": 66,
-          "all": 50
+          "short": 41,
+          "mid": 35,
+          "long": 32,
+          "all": 35
+        },
+        "ema": {
+          "ema5": -1.5,
+          "ema20": -3.9,
+          "ema60": -6.3,
+          "ema120": -5.3,
+          "emaYtd": -6.8
         }
       },
       "cn": [
@@ -894,7 +964,7 @@ export const marketData = {
       "id": "oil_energy",
       "name": "原油/能源",
       "signal": "共振",
-      "confidence": 77,
+      "confidence": 71,
       "lead": "能源价格短期上行",
       "tags": [
         "XLE",
@@ -909,24 +979,31 @@ export const marketData = {
           "USO"
         ],
         "returns": {
-          "1d": 1.2,
-          "5d": 0.2,
-          "20d": -2.4,
-          "60d": 2.5,
-          "120d": 27.6,
-          "ytd": 27
+          "1d": 1.1,
+          "5d": 1.8,
+          "20d": 4.7,
+          "60d": 1.4,
+          "120d": 28.2,
+          "ytd": 27.8
         },
         "rel": {
-          "5d": -1,
-          "20d": -8.2,
-          "60d": -10.5,
-          "120d": 16.5
+          "5d": 4.3,
+          "20d": 4.5,
+          "60d": -9.6,
+          "120d": 19.8
         },
         "strength": {
-          "short": 52,
-          "mid": 49,
-          "long": 99,
-          "all": 70
+          "short": 51,
+          "mid": 53,
+          "long": 68,
+          "all": 58
+        },
+        "ema": {
+          "ema5": 0.4,
+          "ema20": 0.4,
+          "ema60": 1.8,
+          "ema120": 6.4,
+          "emaYtd": 5.2
         }
       },
       "cn": [
@@ -1006,7 +1083,7 @@ export const marketData = {
       "id": "china_internet",
       "name": "中概互联网/港股科技",
       "signal": "共振",
-      "confidence": 64,
+      "confidence": 60,
       "lead": "同一资产跨市场定价",
       "tags": [
         "KWEB",
@@ -1021,24 +1098,31 @@ export const marketData = {
           "CQQQ"
         ],
         "returns": {
-          "1d": 3.5,
-          "5d": 3.9,
-          "20d": -0.9,
-          "60d": -4.6,
-          "120d": -24.5,
-          "ytd": -20.5
+          "1d": -1.0,
+          "5d": -4.5,
+          "20d": -11.6,
+          "60d": -13.1,
+          "120d": -29.2,
+          "ytd": -26.7
         },
         "rel": {
-          "5d": 2.7,
-          "20d": -6.7,
-          "60d": -17.6,
-          "120d": -35.6
+          "5d": -2.0,
+          "20d": -11.8,
+          "60d": -24.1,
+          "120d": -37.6
         },
         "strength": {
-          "short": 61,
-          "mid": 42,
-          "long": 0,
-          "all": 30
+          "short": 38,
+          "mid": 28,
+          "long": 6,
+          "all": 22
+        },
+        "ema": {
+          "ema5": -2.2,
+          "ema20": -5.2,
+          "ema60": -9.8,
+          "ema120": -15.4,
+          "emaYtd": -13.8
         }
       },
       "cn": [
@@ -1108,7 +1192,7 @@ export const marketData = {
       "id": "financials",
       "name": "金融/券商银行",
       "signal": "背离",
-      "confidence": 70,
+      "confidence": 74,
       "lead": "美股金融强，A股金融分化",
       "tags": [
         "XLF",
@@ -1124,24 +1208,31 @@ export const marketData = {
           "KRE"
         ],
         "returns": {
-          "1d": 0.1,
-          "5d": -0.8,
-          "20d": -0.2,
-          "60d": 1.8,
-          "120d": -3.8,
-          "ytd": -6.3
+          "1d": -0.6,
+          "5d": 1.0,
+          "20d": 1.4,
+          "60d": 6.4,
+          "120d": -5.4,
+          "ytd": -5.4
         },
         "rel": {
-          "5d": -2,
-          "20d": -6,
-          "60d": -11.2,
-          "120d": -14.9
+          "5d": 3.5,
+          "20d": 1.2,
+          "60d": -4.6,
+          "120d": -13.8
         },
         "strength": {
-          "short": 49,
+          "short": 52,
           "mid": 52,
-          "long": 36,
-          "all": 45
+          "long": 51,
+          "all": 52
+        },
+        "ema": {
+          "ema5": 0.2,
+          "ema20": 0.7,
+          "ema60": 0.9,
+          "ema120": 0.4,
+          "emaYtd": 0.0
         }
       },
       "cn": [

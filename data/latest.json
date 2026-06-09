@@ -1,7 +1,7 @@
 {
   "date": "2026-06-09",
-  "updatedAt": "2026-06-09T10:02:24+08:00",
-  "sourceNote": "生产校验版：A股ETF代码、名称、成交额和涨跌幅来自东方财富公开行情；美股主ETF涨跌幅仅使用Nasdaq常规交易时段日线收盘价，不使用盘后、夜盘或实时价。历史不足的标的仅展示可计算周期。",
+  "updatedAt": "2026-06-09T11:14:32+08:00",
+  "sourceNote": "生产校验版：A股ETF代码、名称、成交额和涨跌幅来自东方财富公开行情；美股主ETF涨跌幅仅使用Nasdaq常规交易时段日线收盘价，不使用盘后、夜盘或实时价。美股主题强弱分数使用最新收盘价相对EMA5/EMA20/EMA60/EMA120/年内EMA的偏离计算。历史不足的标的使用可得日线初始化EMA，并仅展示可计算涨跌幅周期。",
   "periods": [
     "1d",
     "5d",
@@ -15,7 +15,7 @@
       "id": "memory_chips",
       "name": "存储芯片",
       "signal": "共振",
-      "confidence": 82,
+      "confidence": 88,
       "lead": "美股领先，A股尚未完全跟随",
       "tags": [
         "DRAM",
@@ -42,10 +42,17 @@
           "20d": 14.4
         },
         "strength": {
-          "short": 40,
-          "mid": 74,
+          "short": 56,
+          "mid": 99,
           "long": 99,
-          "all": 76
+          "all": 88
+        },
+        "ema": {
+          "ema5": -2.5,
+          "ema20": 4.8,
+          "ema60": 31.1,
+          "ema120": 55.0,
+          "emaYtd": 22.9
         }
       },
       "cn": [
@@ -116,7 +123,7 @@
       "id": "semiconductor",
       "name": "半导体",
       "signal": "共振",
-      "confidence": 94,
+      "confidence": 92,
       "lead": "美股与A股同步走强",
       "tags": [
         "SOXX",
@@ -148,9 +155,16 @@
         },
         "strength": {
           "short": 57,
-          "mid": 99,
+          "mid": 86,
           "long": 99,
-          "all": 88
+          "all": 84
+        },
+        "ema": {
+          "ema5": -0.5,
+          "ema20": 4.4,
+          "ema60": 21.1,
+          "ema120": 38.4,
+          "emaYtd": 33.9
         }
       },
       "cn": [
@@ -191,7 +205,7 @@
       "id": "ai_compute",
       "name": "AI算力",
       "signal": "共振",
-      "confidence": 90,
+      "confidence": 86,
       "lead": "算力链条中美同步活跃",
       "tags": [
         "AI",
@@ -222,10 +236,17 @@
           "120d": 25.1
         },
         "strength": {
-          "short": 40,
-          "mid": 99,
+          "short": 51,
+          "mid": 71,
           "long": 99,
-          "all": 84
+          "all": 77
+        },
+        "ema": {
+          "ema5": -1.9,
+          "ema20": 1.7,
+          "ema60": 13.5,
+          "ema120": 22.0,
+          "emaYtd": 20.3
         }
       },
       "cn": [
@@ -298,7 +319,7 @@
       "id": "robotics",
       "name": "机器人",
       "signal": "共振",
-      "confidence": 72,
+      "confidence": 69,
       "lead": "美股机器人短期转强",
       "tags": [
         "BOTZ",
@@ -328,10 +349,17 @@
           "120d": -3.1
         },
         "strength": {
-          "short": 41,
-          "mid": 48,
-          "long": 65,
-          "all": 53
+          "short": 42,
+          "mid": 44,
+          "long": 56,
+          "all": 48
+        },
+        "ema": {
+          "ema5": -2.0,
+          "ema20": -3.2,
+          "ema60": -0.2,
+          "ema120": 2.3,
+          "emaYtd": 1.3
         }
       },
       "cn": [
@@ -369,8 +397,8 @@
     {
       "id": "ev_battery",
       "name": "新能源车/锂电",
-      "signal": "传导",
-      "confidence": 90,
+      "signal": "背离",
+      "confidence": 82,
       "lead": "美股反弹，A股仍偏弱",
       "tags": [
         "DRIV",
@@ -400,10 +428,17 @@
           "120d": 21.9
         },
         "strength": {
-          "short": 41,
-          "mid": 86,
-          "long": 99,
-          "all": 80
+          "short": 42,
+          "mid": 53,
+          "long": 87,
+          "all": 64
+        },
+        "ema": {
+          "ema5": -2.8,
+          "ema20": -2.4,
+          "ema60": 5.4,
+          "ema120": 13.4,
+          "emaYtd": 11.0
         }
       },
       "cn": [
@@ -473,8 +508,8 @@
     {
       "id": "solar_clean",
       "name": "光伏/清洁能源",
-      "signal": "传导",
-      "confidence": 81,
+      "signal": "背离",
+      "confidence": 73,
       "lead": "海外清洁能源回暖，A股趋势仍弱",
       "tags": [
         "TAN",
@@ -503,10 +538,17 @@
           "120d": 24.5
         },
         "strength": {
-          "short": 30,
-          "mid": 76,
-          "long": 99,
-          "all": 74
+          "short": 37,
+          "mid": 48,
+          "long": 79,
+          "all": 58
+        },
+        "ema": {
+          "ema5": -4.9,
+          "ema20": -4.2,
+          "ema60": 3.3,
+          "ema120": 10.8,
+          "emaYtd": 7.8
         }
       },
       "cn": [
@@ -546,7 +588,7 @@
       "id": "cyber_security",
       "name": "网络安全",
       "signal": "传导",
-      "confidence": 76,
+      "confidence": 73,
       "lead": "美股网络安全中期走强",
       "tags": [
         "CIBR",
@@ -575,10 +617,17 @@
           "120d": 8.2
         },
         "strength": {
-          "short": 34,
-          "mid": 99,
+          "short": 52,
+          "mid": 73,
           "long": 99,
-          "all": 83
+          "all": 78
+        },
+        "ema": {
+          "ema5": -2.4,
+          "ema20": 2.6,
+          "ema60": 13.8,
+          "ema120": 18.3,
+          "emaYtd": 18.5
         }
       },
       "cn": [
@@ -618,7 +667,7 @@
       "id": "aerospace_defense",
       "name": "航天军工",
       "signal": "背离",
-      "confidence": 72,
+      "confidence": 70,
       "lead": "国防航天主题同步强",
       "tags": [
         "ITA",
@@ -649,10 +698,17 @@
           "120d": 0.1
         },
         "strength": {
-          "short": 47,
-          "mid": 50,
-          "long": 68,
-          "all": 56
+          "short": 49,
+          "mid": 51,
+          "long": 53,
+          "all": 51
+        },
+        "ema": {
+          "ema5": -0.6,
+          "ema20": 0.1,
+          "ema60": 0.5,
+          "ema120": 1.7,
+          "emaYtd": 0.1
         }
       },
       "cn": [
@@ -691,7 +747,7 @@
       "id": "biotech",
       "name": "生物科技/创新药",
       "signal": "背离",
-      "confidence": 76,
+      "confidence": 73,
       "lead": "美股创新药改善，A股低位修复",
       "tags": [
         "IBB",
@@ -720,10 +776,17 @@
           "120d": -4.1
         },
         "strength": {
-          "short": 43,
-          "mid": 49,
-          "long": 65,
-          "all": 54
+          "short": 44,
+          "mid": 44,
+          "long": 53,
+          "all": 48
+        },
+        "ema": {
+          "ema5": -1.3,
+          "ema20": -2.6,
+          "ema60": -1.6,
+          "ema120": 1.9,
+          "emaYtd": -0.3
         }
       },
       "cn": [
@@ -791,7 +854,7 @@
       "id": "gold_metals",
       "name": "黄金/有色",
       "signal": "背离",
-      "confidence": 68,
+      "confidence": 67,
       "lead": "避险与资源品共振",
       "tags": [
         "GLD",
@@ -821,10 +884,17 @@
           "120d": -7.9
         },
         "strength": {
-          "short": 44,
-          "mid": 16,
-          "long": 51,
-          "all": 37
+          "short": 41,
+          "mid": 35,
+          "long": 32,
+          "all": 35
+        },
+        "ema": {
+          "ema5": -1.5,
+          "ema20": -3.9,
+          "ema60": -6.3,
+          "ema120": -5.3,
+          "emaYtd": -6.8
         }
       },
       "cn": [
@@ -894,7 +964,7 @@
       "id": "oil_energy",
       "name": "原油/能源",
       "signal": "共振",
-      "confidence": 79,
+      "confidence": 71,
       "lead": "能源价格短期上行",
       "tags": [
         "XLE",
@@ -923,10 +993,17 @@
           "120d": 19.8
         },
         "strength": {
-          "short": 55,
-          "mid": 60,
-          "long": 99,
-          "all": 74
+          "short": 51,
+          "mid": 53,
+          "long": 68,
+          "all": 58
+        },
+        "ema": {
+          "ema5": 0.4,
+          "ema20": 0.4,
+          "ema60": 1.8,
+          "ema120": 6.4,
+          "emaYtd": 5.2
         }
       },
       "cn": [
@@ -1006,7 +1083,7 @@
       "id": "china_internet",
       "name": "中概互联网/港股科技",
       "signal": "共振",
-      "confidence": 57,
+      "confidence": 60,
       "lead": "同一资产跨市场定价",
       "tags": [
         "KWEB",
@@ -1035,10 +1112,17 @@
           "120d": -37.6
         },
         "strength": {
-          "short": 41,
-          "mid": 13,
-          "long": 0,
-          "all": 15
+          "short": 38,
+          "mid": 28,
+          "long": 6,
+          "all": 22
+        },
+        "ema": {
+          "ema5": -2.2,
+          "ema20": -5.2,
+          "ema60": -9.8,
+          "ema120": -15.4,
+          "emaYtd": -13.8
         }
       },
       "cn": [
@@ -1108,7 +1192,7 @@
       "id": "financials",
       "name": "金融/券商银行",
       "signal": "背离",
-      "confidence": 72,
+      "confidence": 74,
       "lead": "美股金融强，A股金融分化",
       "tags": [
         "XLF",
@@ -1138,10 +1222,17 @@
           "120d": -13.8
         },
         "strength": {
-          "short": 51,
-          "mid": 61,
-          "long": 34,
-          "all": 48
+          "short": 52,
+          "mid": 52,
+          "long": 51,
+          "all": 52
+        },
+        "ema": {
+          "ema5": 0.2,
+          "ema20": 0.7,
+          "ema60": 0.9,
+          "ema120": 0.4,
+          "emaYtd": 0.0
         }
       },
       "cn": [

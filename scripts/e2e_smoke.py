@@ -36,7 +36,7 @@ def assert_snapshot_schema() -> None:
     data = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
     assert data.get("themes"), "themes[] is empty"
     required_theme = {"id", "name", "signal", "confidence", "lead", "tags", "us", "cn"}
-    required_us = {"primary", "etfs", "returns", "rel", "strength"}
+    required_us = {"primary", "etfs", "returns", "ema", "rel", "strength"}
     required_cn = {"code", "name", "index", "returns", "amount", "mappingScore", "status", "reasons"}
     valid_signals = {"共振", "传导", "背离"}
 
@@ -45,6 +45,9 @@ def assert_snapshot_schema() -> None:
         assert not missing, f"{theme.get('id', '<unknown>')} missing theme fields: {sorted(missing)}"
         assert theme["signal"] in valid_signals, f"invalid signal: {theme['signal']}"
         assert required_us <= theme["us"].keys(), f"{theme['id']} missing us fields"
+        assert {"ema5", "ema20", "ema60", "ema120", "emaYtd"} <= theme["us"]["ema"].keys(), (
+            f"{theme['id']} missing EMA strength inputs"
+        )
         assert {"short", "mid", "long", "all"} <= theme["us"]["strength"].keys(), f"{theme['id']} missing strength keys"
         assert theme["cn"], f"{theme['id']} has no A-share ETF candidates"
         for item in theme["cn"]:
